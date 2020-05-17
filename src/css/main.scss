@@ -1,0 +1,274 @@
+$defaultFont:18px "Roboto","Helvetica",sans-serif;
+
+html,
+body{
+    height:100%;
+    margin:0;
+    padding:0;
+    font:$defaultFont;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+h1,h2,h3,h4,h5,h6{
+    margin:0;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("fonts/Roboto-Light.ttf");
+}
+
+
+@font-face {
+    font-family: 'icomoon';
+    src:  url('fonts/icomoon.eot?fupgfm');
+    src:  url('fonts/icomoon.eot?fupgfm#iefix') format('embedded-opentype'),
+      url('fonts/icomoon.ttf?fupgfm') format('truetype'),
+      url('fonts/icomoon.woff?fupgfm') format('woff'),
+      url('fonts/icomoon.svg?fupgfm#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+  
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+.icon-info:before {
+    content: "\ea0c";
+}
+
+$checkboxSize: 23px;
+$checkboxInnerCircleSize:90%;
+$checkboxCheckColor:#00b7ff;
+$greyColor: #b4b4b4;
+$todoItemPadding:8px;
+$addBtnColor:#06ce42;
+$addBtnRadius:15px;
+$addBtnPlusWidth:50%;
+$addBtnPlusHeight:3px;
+$appBorderRadius:15px;
+
+.container{
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.app-container{
+    margin:auto;
+    width:100%;
+    height:100%;
+    position: relative;
+}
+
+.todo-app{
+    background:#fff;
+    padding:30px 0px;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,.09);
+    border-radius: $appBorderRadius;
+}
+
+.header_text{
+    text-align:center;
+    font-size:26px;
+    font-weight: 600;
+    margin-bottom:14px;
+}
+
+.todo-body{
+    overflow-y:auto;
+    display:flex;
+    flex-direction: column;
+    padding-bottom: 25px;
+    margin-left:10px;
+    overflow:hidden;
+    overflow-y: auto;
+}
+
+.todo-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+.todo-body::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+/* Handle */
+.todo-body::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+.todo-body::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.todo-item{
+    flex-shrink: 0;
+    display: flex;
+}
+
+.todo-item_left{
+    align-self: flex-start;
+    input{
+        display: none;
+    }
+
+    input:checked + .todo-item_left_checkbox{
+        border-color: $checkboxCheckColor;
+    }
+
+    input:checked + .todo-item_left_checkbox:after{
+        background-color:$checkboxCheckColor;
+    }
+}
+
+.todo-item_left_checkbox{
+    cursor: pointer;
+    width:$checkboxSize;
+    height:$checkboxSize;
+    background: white;
+    border:1px solid $greyColor;
+    border-radius: $checkboxSize / 2;
+    margin:$todoItemPadding;
+    position: relative;
+    display: flex;
+}
+
+.todo-item_left_checkbox:after{
+    content:"";
+    border-radius: $checkboxInnerCircleSize;
+    margin: 2px;
+    width:$checkboxInnerCircleSize;
+}
+
+.todo-item_text{
+    flex:1;
+    padding-right:15px;
+    word-break: break-word;
+}
+
+.todo-item_text:focus{
+    outline:none;
+}
+
+.todo-item_details{
+    padding-right:10px;
+}
+
+.todo-item_details i{
+    color:$checkboxCheckColor;
+    font-size:20px;
+    cursor: pointer;
+    padding:4px;
+}
+
+.todo-item_details i:hover{
+    color:darken($color: $checkboxCheckColor, $amount: 15%);
+}
+
+.todo-item_wrap{
+    width:100%;
+    max-width: 100%;
+}
+
+.todo-item_body{
+    width:100%;
+    border-bottom: 1px solid #e0e0e0;
+    display:flex;
+    padding:$todoItemPadding 0px;
+}
+
+.todo-item_time{
+    color:$greyColor;
+    font-size:13px;
+}
+
+.todo-details{
+    top:0;
+    position: absolute;
+    width:100px;
+    height:100px;
+    background:#eee;
+}
+
+.footer{
+    position: absolute;
+    width:100%;
+    padding:8px;
+    padding-left:18px;
+    bottom:0px;
+    left:0px;
+    backdrop-filter: blur(50px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-bottom-left-radius: $appBorderRadius;
+    border-bottom-right-radius: $appBorderRadius;
+}
+
+.footer_text{
+    color:$addBtnColor;
+    font-weight: bold;
+    margin-left:7px;
+}
+
+.footer_add-new{
+    width:$addBtnRadius*2;
+    height:$addBtnRadius*2;
+    border-radius:$addBtnRadius;
+    background:$addBtnColor;
+    position: relative;
+
+    &:after,
+    &:before{
+        content:"";
+        position: absolute;
+        left:50%;
+        top:50%;
+        transform:translate(-50%,-50%);
+        background:#fff;
+        border-radius: $addBtnRadius;
+    }
+
+    &:after{
+        width:$addBtnPlusWidth;
+        height:$addBtnPlusHeight;
+    }
+
+    &:before{
+        width:$addBtnPlusHeight;
+        height:$addBtnPlusWidth;
+    }
+}
+
+@media screen and (min-width: 800px) and (min-height: 300px) {
+    .app-container{
+        width: 700px;
+        height: 800px;
+        max-height:95%;
+        min-height:400px;
+    }
+}
