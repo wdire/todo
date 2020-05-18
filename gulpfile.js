@@ -17,8 +17,6 @@ const fs = require("fs");
 
 dotenv.config();
 
-console.log(process.env.node_env);
-
 const config = {
     devMode: process.env.node_env,
     sourceMaps: process.env.node_env === "development"
@@ -98,18 +96,20 @@ gulp.task('html', async () => {
         .pipe(browserSync.stream());
 });
 
-gulp.task('fonts', async () => {
-    return gulp.src("src/fonts/*.*")
-        .pipe(gulp.dest("dist/fonts/"))
-        .pipe(browserSync.stream());
+gulp.task('fonts', () => {
+    return gulp.src("src/fonts/*")
+        .pipe(gulp.dest("dist/fonts"))
+        .on("error",function(E){
+            console.log(E);
+        });
 });
 
 
-gulp.task('delete', async () => {
-    del(["dist/*"])
+gulp.task('delete', () => {
+    return del(["dist/*"]);
 });
 
-gulp.task('watch', () => {
+gulp.task('watch', async (e) => {
     gulp.watch([
         "src/**/*.css",
         "src/**/*.scss",
@@ -117,15 +117,14 @@ gulp.task('watch', () => {
     gulp.watch("src/**/*.js", gulp.series('js'));
     gulp.watch("src/*.html", gulp.series('html'));
     gulp.watch("src/fonts/*");
-    return;
 });
 
-gulp.task("build", gulp.parallel(
+gulp.task("build", gulp.series(
     "delete",
+    "fonts",
     'html',
     'css',
     'js',
-    "fonts"
 ));
 
 gulp.task("dev", gulp.parallel(

@@ -23,7 +23,7 @@ module.exports = {
                 mangle: {
                     toplevel: true,
                 },
-                allowEmpty: true
+                allowEmpty: true,
             },
         })],
   },
