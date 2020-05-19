@@ -92,6 +92,7 @@ gulp.task("js", async () => {
 
 gulp.task('html', async () => {
     return gulp.src("src/*.html")
+        .pipe(minifyHTML({ collapseWhitespace: true }))
         .pipe(gulp.dest("dist/"))
         .pipe(browserSync.stream());
 });
