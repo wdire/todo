@@ -6,6 +6,9 @@ const devMode = process.env.node_env === "development" ? "source-map" : "";
 
 module.exports = {
     mode: "none",
+    entry: {
+        index:'./src/js/app.js'
+    },
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, 'dist'),
@@ -51,7 +54,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            "window.jQuery": "jquery'",
+            "window.jQuery": "jquery",
             "window.$": "jquery"
         })
     ],

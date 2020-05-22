@@ -13,7 +13,7 @@
                     <div class="header_text">To-Do List</div>
                 </div>
                 <div class="todo-body">
-                    <div class="todo-item">
+                    <div class="todo-item" data-id="56D1ASD">
                         <label class="todo-item_left">
                             <input type="checkbox">
                             <div class="todo-item_left_checkbox"></div>
@@ -35,127 +35,75 @@
                 </div>
                 <div class="todo-details">
                     <div class="todo-details_head">Details</div>
-                    <div class="todo-details_section-container">
-                        <div class="todo-details_section">
-                            <div class="todo-details_options">
-                                <div class="todo-details_opt-selectdate">
-                                    <label class="cb-contanier">
-                                        <input type="checkbox">
-                                        <span class="cb-style"></span>
-                                        <span class="cb-text">Set End Date</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="todo-details_selectdate">
-                                <input type="text" id="datepicker">
-                            </div>
+                    <div class="todo-details_body">
+                        <div class="todo-details_curritemtextpreview">
+                            
                         </div>
-                        <div class="todo-details_section">
-                            <div class="todo-details_options">
-                                <div class="todo-details_opt-selectdate">
-                                    <label class="cb-contanier">
-                                        <input type="checkbox">
-                                        <span class="cb-style"></span>
-                                        <span class="cb-text">Set End Time</span>
-                                    </label>
+                        <div class="todo-details_section-container">
+                            <div class="todo-details_section">
+                                <div class="todo-details_options">
+                                    <div class="todo-details_opt-selectdate">
+                                        <label class="cb-contanier">
+                                            <input type="checkbox">
+                                            <span class="cb-style"></span>
+                                            <span class="cb-text">Set End Time</span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="todo-details_selectdate">
-                                <div>
-                                    <select>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                        <option value="13">13</option>
-                                        <option value="14">14</option>
-                                        <option value="15">15</option>
-                                        <option value="16">16</option>
-                                        <option value="17">17</option>
-                                        <option value="18">18</option>
-                                        <option value="19">19</option>
-                                        <option value="20">20</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-                                    </select>
-                                    :
-                                    <select>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                        <option value="13">13</option>
-                                        <option value="14">14</option>
-                                        <option value="15">15</option>
-                                        <option value="16">16</option>
-                                        <option value="17">17</option>
-                                        <option value="18">18</option>
-                                        <option value="19">19</option>
-                                        <option value="20">20</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-                                        <option value="25">25</option>
-                                        <option value="26">26</option>
-                                        <option value="27">27</option>
-                                        <option value="28">28</option>
-                                        <option value="29">29</option>
-                                        <option value="30">30</option>
-                                        <option value="31">31</option>
-                                        <option value="32">32</option>
-                                        <option value="33">33</option>
-                                        <option value="34">34</option>
-                                        <option value="35">35</option>
-                                        <option value="36">36</option>
-                                        <option value="37">37</option>
-                                        <option value="38">38</option>
-                                        <option value="39">39</option>
-                                        <option value="40">40</option>
-                                        <option value="41">41</option>
-                                        <option value="42">42</option>
-                                        <option value="43">43</option>
-                                        <option value="44">44</option>
-                                        <option value="45">45</option>
-                                        <option value="46">46</option>
-                                        <option value="47">47</option>
-                                        <option value="48">48</option>
-                                        <option value="49">49</option>
-                                        <option value="50">50</option>
-                                        <option value="51">51</option>
-                                        <option value="52">52</option>
-                                        <option value="53">53</option>
-                                        <option value="54">54</option>
-                                        <option value="55">55</option>
-                                        <option value="56">56</option>
-                                        <option value="57">57</option>
-                                        <option value="58">58</option>
-                                        <option value="59">59</option>
-                                        <option value="60">60</option>
-                                    </select>
+                                <div class="todo-details_selectdate">
+                                    <input tabindex="-1" type="text" id="datepicker" readonly="true" class="todo-details_input">
+                                    <div class="todo-details_input">
+                                        <select tabindex="-1" id="time_hour">
+                                            <option>00</option>
+                                            <option>01</option>
+                                            <option>02</option>
+                                            <option>03</option>
+                                            <option>04</option>
+                                            <option>05</option>
+                                            <option>06</option>
+                                            <option>07</option>
+                                            <option>08</option>
+                                            <option>09</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                            <option>13</option>
+                                            <option>14</option>
+                                            <option>15</option>
+                                            <option>16</option>
+                                            <option>17</option>
+                                            <option>18</option>
+                                            <option>19</option>
+                                            <option>20</option>
+                                            <option>21</option>
+                                            <option>22</option>
+                                            <option>23</option>
+                                        </select>
+                                        <span>:</span>
+                                        <select tabindex="-1" id="time_minute">
+                                            <option>00</option>
+                                            <option>05</option>
+                                            <option>10</option>
+                                            <option>15</option>
+                                            <option>20</option>
+                                            <option>25</option>
+                                            <option>30</option>
+                                            <option>35</option>
+                                            <option>40</option>
+                                            <option>45</option>
+                                            <option>50</option>
+                                            <option>55</option>
+                                            <option>60</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="todo-details_close">Done</div>
+                    <div class="todo-details_footer">
+                        <div class="todo-details_btn" id="todo-details_delete">Delete</div>
+                        <div class="todo-details_btn" id="todo-details_done">Done</div>
+                    </div>
                 </div>
                 <div class="footer">
                     <div class="footer_add-new"></div>
