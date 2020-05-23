@@ -7,13 +7,14 @@ module.exports = (function(){
     const APP_FOOTER = APP.querySelector(".footer");
     const APP_DETAILS = APP.querySelector(".todo-details");
 
-    const APP_DATETIME_ELMS = {
+    const APP_DETAILS_ELMS = {
         date:document.querySelector("#datepicker"),
         hour:document.querySelector("#time_hour"),
         minute:document.querySelector("#time_minute")
     }
 
     let currentOpenedItem = null;
+    let currentOpenedItemObject = null;
     let detailsPopupActive = false;
     let detailsDateCheckbox = false;
 
@@ -33,7 +34,7 @@ module.exports = (function(){
         todoItemStartCloseTags:'</div>',
         todoItemTimeStart: '<div class="todo-item_time">',
         todoItemTimeCloseTags: '</div>',
-        todoItemCloseTags: '</div><div class="todo-item_details"><i class="icon-info"></i></div></div></div>'
+        todoItemCloseTags: '</div><div class="todo-item_details"><i class="icon-info"></i></div></div>'
     }
 
     const helper = require("./helper");
@@ -65,7 +66,7 @@ module.exports = (function(){
      * @param {Boolean} details.completed Completed true or false, default false
      */
     function addItem(text = "", details = []){
-        let id = helper.genId(6);
+        let id = details.id || helper.genId(6);
         let item = "";
 
         item = templates.todoItemStart + text + templates.todoItemStartCloseTags;
@@ -75,25 +76,32 @@ module.exports = (function(){
             item += templates.todoItemTimeCloseTags;
         }
         item += templates.todoItemCloseTags;
-        
+
         item = helper.createElementFromString(item);
 
         item.setAttribute("data-id",id);
-        
-        allItems.push(
-            {
-                id:id,
-                contentText:text,
-                completed:details.completed || false,
-                endTime:details.endtime || null
-            }
-        );
+
+        if(details.endtime && helper.isDatePassed(details.endtime)){
+            item.querySelector(".todo-item_time").classList.add("passed");
+        }
+
+        if(!details.init){
+            allItems.push(
+                {
+                    id:id,
+                    contentText:text,
+                    completed:details.completed || false,
+                    endtime:details.endtime || null
+                }
+            );
+        }
 
         currentTodoInfo.items = allItems;
 
         APP_BODY.appendChild(item);
         let textItem = item.querySelector(".todo-item_text");
-        helper.setFocus(textItem, textItem.innerText.length);
+        if(details.new)
+            helper.setFocus(textItem, textItem.innerText.length);
     }
 
     function removeItemByItemText(elm){
@@ -117,7 +125,17 @@ module.exports = (function(){
                 return;
             }
         };
-        addItem();
+        addItem("", {new:true});
+    }
+
+    function dateCheckboxHandler(){
+        if(this.checked){
+            APP_DETAILS.querySelector(".todo-details_selectdate").classList.add("active");
+            detailsDateCheckbox = true;
+        }else{
+            APP_DETAILS.querySelector(".todo-details_selectdate").classList.remove("active");
+            detailsDateCheckbox = false;
+        }
     }
 
     function findInAllItems(searchId){
@@ -136,14 +154,12 @@ module.exports = (function(){
         defaultDate.setTime(defaultDate.getTime() + timeAfterNow);
 
         let hour = String(defaultDate.getHours());
-        hour = hour.length === 1 ? "0" + hour : hour;
         let minute = String(helper.round5(defaultDate.getMinutes()));
-        minute = minute.length === 1 ? "0" + minute : minute;
 
-        helper.selectInOptions(APP_DATETIME_ELMS.hour, hour);
-        helper.selectInOptions(APP_DATETIME_ELMS.minute, minute);
+        helper.selectInOptions(APP_DETAILS_ELMS.hour, hour);
+        helper.selectInOptions(APP_DETAILS_ELMS.minute, minute);
 
-        $(APP_DATETIME_ELMS.date).datepicker( {
+        $(APP_DETAILS_ELMS.date).datepicker( {
             dateFormat:"dd/mm/yy",
             showOtherMonths: true,
             selectOtherMonths: true,
@@ -161,18 +177,51 @@ module.exports = (function(){
         detailsPopupActive = true;
 
         let item = findInAllItems(find.getAttribute("data-id"));
-        APP_DETAILS.querySelector(".todo-details_selectdate").checked = Boolean(item.endDate);
+        currentOpenedItemObject = item;
+
+        if(item.endtime){
+            let dateSplit = item.endtime.split(" ");
+
+            APP_DETAILS_ELMS.date.value = dateSplit[0];
+            APP_DETAILS_ELMS.hour.value = dateSplit[1].split(":")[0];
+            APP_DETAILS_ELMS.minute.value = dateSplit[1].split(":")[1];
+        }
+
+        APP_DETAILS.querySelector(".cb-contanier input").checked = Boolean(item.endtime);
+        dateCheckboxHandler.apply(APP_DETAILS.querySelector(".cb-contanier input"));
     }
 
     function closeDetailsPopup(){
         currentOpenedItem.classList.remove("active");
         APP_DETAILS.classList.remove("active");
         currentOpenedItem = null;
+        currentOpenedItemObject = null;
         detailsPopupActive = false;
+    }
+
+    function saveAllItemsToStorage(){
+        storage.setTodoInfo(allItems);
+    }
+
+    function initItems(){
+        allItems = storage.getTodoInfo() || [];
+        if(allItems[0] && allItems[0].id){
+            allItems.forEach(e => {
+                addItem(e.contentText, {
+                    id:e.id || null,
+                    endtime: e.endtime || null,
+                    completed: e.completed || null,
+                    init:true
+                });
+            });
+        }
     }
 
     return {
         init:function(){
+
+            initItems();
+
             document.addEventListener("click", function(e){
                 let elm = e.target;
                 if(elm === APP_FOOTER || APP_FOOTER.contains(elm)){
@@ -180,7 +229,7 @@ module.exports = (function(){
                     return;
                 }
 
-                if(detailsPopupActive && !APP_DETAILS.contains(elm) && !$(APP_DATETIME_ELMS.date).datepicker( "widget" ).is(":visible")){
+                if(detailsPopupActive && !APP_DETAILS.contains(elm) && !$(APP_DETAILS_ELMS.date).datepicker( "widget" ).is(":visible")){
                     closeDetailsPopup();
                     return;
                 }
@@ -191,28 +240,44 @@ module.exports = (function(){
                 }
 
                 if(elm.id === "todo-details_done"){
+                    let itemTimeElm = currentOpenedItem.querySelector(".todo-item_time");
                     if(detailsDateCheckbox){
-                        let date = APP_DATETIME_ELMS.date.value;
-                        let hour = APP_DATETIME_ELMS.hour.options[APP_DATETIME_ELMS.hour.options.selectedIndex].value;
-                        let minute = APP_DATETIME_ELMS.minute.options[APP_DATETIME_ELMS.minute.options.selectedIndex].value;
+                        let date = APP_DETAILS_ELMS.date.value;
+                        let hour = APP_DETAILS_ELMS.hour.options[APP_DETAILS_ELMS.hour.options.selectedIndex].value;
+                        let minute = APP_DETAILS_ELMS.minute.options[APP_DETAILS_ELMS.minute.options.selectedIndex].value;
 
-                        let endTime = date + " " +hour + ":" + minute;
-                        console.log(endTime);
+                        let endtime = date + " " +hour + ":" + minute;
+                        
+                        if(itemTimeElm){
+                            itemTimeElm.innerText = endtime;
+                        }else{
+                            let timeElm = helper.createElementFromString(templates.todoItemTimeStart + helper.formatDateYearToTwo(endtime) + templates.todoItemTimeCloseTags);
+                            currentOpenedItem.querySelector(".todo-item_wrap").appendChild(timeElm);
+                        }
+
+                        if(helper.isDatePassed(endtime)){
+                            currentOpenedItem.querySelector(".todo-item_time").classList.add("passed");
+                        }else{
+                            currentOpenedItem.querySelector(".todo-item_time").classList.remove("passed");
+                        }
+
+                        currentOpenedItemObject.endtime = endtime;
+                    }else{
+                        if(itemTimeElm){
+                            itemTimeElm.remove();
+                        }
+                        currentOpenedItemObject.endtime = null;
                     }
+                    closeDetailsPopup();
+                    saveAllItemsToStorage();
                 }
             });
 
-            APP_DETAILS.querySelector(".cb-contanier input").addEventListener("change", function(){
-                if(this.checked){
-                    APP_DETAILS.querySelector(".todo-details_selectdate").classList.add("active");
-                    detailsDateCheckbox = true;
-                }else{
-                    APP_DETAILS.querySelector(".todo-details_selectdate").classList.remove("active");
-                    detailsDateCheckbox = false;
-                }
+            APP_DETAILS.querySelector(".cb-contanier input").addEventListener("input", function(){
+                dateCheckboxHandler.apply(this);
             });
 
-            document.addEventListener("keydown", function(e){
+            document.addEventListener("keyup", function(e){
                 let elm = e.target;
                 if(elm && elm.classList.contains("todo-item_text")){
                     if(e.keyCode === 8 && elm.innerText.length === 0){
@@ -224,9 +289,13 @@ module.exports = (function(){
                 }
             });
 
-            setInterval(function(){
-                console.log(allItems);
-            },10 * 1000);
+            document.addEventListener("keyup", helper.debounce(function(e){
+                let elm = e.target;
+                if(elm && elm.classList.contains("todo-item_text")){
+                    saveAllItemsToStorage();
+                    console.log("saved");
+                }
+            },600));
 
             /* if(currentFocusItem && currentFocusItem.innerText.trim().length === 0){
                 removeItemByItemText(currentFocusItem);

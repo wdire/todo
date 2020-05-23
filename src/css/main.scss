@@ -236,6 +236,9 @@ $appBorderRadius:15px;
     color:$greyColor;
     font-size:13px;
     user-select: none;
+    &.passed{
+        color:#ff5656;
+    }
 }
 
 .footer{

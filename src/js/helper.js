@@ -60,6 +60,29 @@ module.exports = (function(){
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => func.apply(context, args), delay);
             }
+        },
+        /**
+            @param {String} time Day/Month/Year example input: 01/01/2020 19:30
+            @return {String} example output: 01/01/20 19:30
+        */
+        formatDateYearToTwo:function(time){
+            time = time.split(" ");
+            time[0] = time[0].split("/");
+            time[0][time[0].length - 1] = time[0][time[0].length - 1].slice(-2);
+            time[0] = time[0].join("/");
+            return time.join(" ");
+        },
+        /**
+         * 
+         * @param {String} date Date to be checked (this will be dirrectly written in Date class)
+         * @return {Boolean} True on given date is in the past, false on future
+         */
+        isDatePassed:function(date){
+            let split = date.split(" ");
+            let day = split[0].split("/");
+            let hourMinute = split[1].split(":");
+            let possiblePastDate = new Date(day[2], day[1]-1, day[0], hourMinute[0], hourMinute[1],0,0);
+            return possiblePastDate.getTime() < new Date().getTime();
         }
     }   
 
