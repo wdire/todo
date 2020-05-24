@@ -85,9 +85,13 @@ module.exports = (function(){
             item.querySelector(".todo-item_time").classList.add("passed");
         }
 
+        if(details.completed){
+            item.querySelector(".todo-item_left input").checked = true;
+        }
+
         if(!details.init){
             allItems.push(
-                {
+                {   
                     id:id,
                     contentText:text,
                     completed:details.completed || false,
@@ -105,17 +109,23 @@ module.exports = (function(){
     }
 
     function removeItemByItemText(elm){
-        let item = helper.findParentByClassName(elm, "todo-item");
+        let item;
+        if(elm.classList.contains("todo-item")){
+            item = elm;
+        }else if(elm.classList.contains("todo-item_text")){
+            item = helper.findParentByClassName(elm, "todo-item");
+        }else{
+            return;
+        }   
         let k = findInAllItems(item.getAttribute("data-id"));
         let index = allItems.indexOf(k);
-        console.log(index);
         if(index < 0){
             alert("Error");
             console.log("Error");
             return;
         }
         allItems.splice(index, 1);
-        helper.findParentByClassName(elm, "todo-item").remove();
+        item.remove();
     }
 
     function newTaskHandler(){
@@ -214,6 +224,8 @@ module.exports = (function(){
                     init:true
                 });
             });
+        }else{
+            addItem("Type here...");
         }
     }
 
@@ -271,19 +283,46 @@ module.exports = (function(){
                     closeDetailsPopup();
                     saveAllItemsToStorage();
                 }
+
+                if(elm.id === "todo-details_delete"){
+                    removeItemByItemText(currentOpenedItem);
+                    closeDetailsPopup();
+                    saveAllItemsToStorage();
+                }         
             });
 
             APP_DETAILS.querySelector(".cb-contanier input").addEventListener("input", function(){
                 dateCheckboxHandler.apply(this);
             });
 
+            document.addEventListener("input", function(e){
+                if(e.target && e.target.parentNode.classList.contains("todo-item_left")){
+                    
+                    let item = helper.findParentByClassName(e.target, "todo-item");
+                    let itemObject = findInAllItems(item.getAttribute("data-id"));
+                    if(e.target.checked){
+                        itemObject.completed = true;
+                    }else{
+                        itemObject.completed = false;
+                    }
+                    saveAllItemsToStorage();
+                }
+            });
+
+            document.addEventListener("keydown", function(e){
+                let elm = e.target;
+                if(elm && elm.classList.contains("todo-item_text")){
+                    if(e.keyCode === 8 && elm.innerText.trim().length === 0){
+                        removeItemByItemText(elm);
+                        saveAllItemsToStorage();
+                        return;
+                    }
+                }
+            })
+
             document.addEventListener("keyup", function(e){
                 let elm = e.target;
                 if(elm && elm.classList.contains("todo-item_text")){
-                    if(e.keyCode === 8 && elm.innerText.length === 0){
-                        removeItemByItemText(elm);
-                        return;
-                    }
                     let item = helper.findParentByClassName(elm, "todo-item");
                     findInAllItems(item.getAttribute("data-id")).contentText = elm.innerText;
                 }

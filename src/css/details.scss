@@ -101,10 +101,12 @@
 .todo-details_selectdate{
     display:flex;
     opacity:0;
-    transition: 0.2s opacity ease;
+    visibility: hidden;
+    transition: 0.2s opacity ease-in-out, 0.2s visibility ease-in-out;
     height: 0;
 
     &.active{
+        visibility: visible;
         opacity:1;
         height: initial;
     }

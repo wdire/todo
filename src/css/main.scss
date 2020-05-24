@@ -159,6 +159,7 @@ $appBorderRadius:15px;
 
 .todo-item_left{
     align-self: flex-start;
+    cursor: pointer;
     input{
         display: none;
     }
@@ -173,7 +174,6 @@ $appBorderRadius:15px;
 }
 
 .todo-item_left_checkbox{
-    cursor: pointer;
     width:$checkboxSize;
     height:$checkboxSize;
     background: white;
@@ -205,7 +205,7 @@ $appBorderRadius:15px;
 
 .todo-item_details{
     height: 20px;
-    margin-top:2px;
+    margin-top:4px;
     margin-right:10px;
 }
 
