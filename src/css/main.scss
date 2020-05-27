@@ -187,7 +187,7 @@ $appBorderRadius:15px;
 .todo-item_left_checkbox:after{
     content:"";
     border-radius: $checkboxInnerCircleSize;
-    margin: 2px;
+    margin: 3px;
     width:$checkboxInnerCircleSize;
 }
 

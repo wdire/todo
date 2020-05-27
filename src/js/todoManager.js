@@ -231,7 +231,6 @@ module.exports = (function(){
 
     return {
         init:function(){
-
             initItems();
 
             document.addEventListener("click", function(e){
@@ -272,6 +271,10 @@ module.exports = (function(){
                         }else{
                             currentOpenedItem.querySelector(".todo-item_time").classList.remove("passed");
                         }
+                        
+                        if(currentOpenedItem.querySelector(".todo-item_text").innerText.trim().length === 0){       
+                            currentOpenedItemObject.contentText = currentOpenedItem.querySelector(".todo-item_text").innerText = "New Task";
+                        }
 
                         currentOpenedItemObject.endtime = endtime;
                     }else{
@@ -280,6 +283,7 @@ module.exports = (function(){
                         }
                         currentOpenedItemObject.endtime = null;
                     }
+
                     closeDetailsPopup();
                     saveAllItemsToStorage();
                 }
